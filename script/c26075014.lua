@@ -144,12 +144,12 @@ function c26075014.tdfilter(c)
 	return c:IsAbleToDeck() and (c:IsFacedown() or not c:IsOnField())
 end
 function c26075014.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local LOC =LOCATION_SZONE|LOCATION_GRAVE|LOCATION_REMOVED 
+	local LOC =LOCATION_ONFIELD|LOCATION_GRAVE|LOCATION_REMOVED 
 	if chk==0 then return Duel.IsExistingMatchingCard(c26075014.tdfilter,tp,LOC,LOC,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,1,0,0)
 end
 function c26075014.tdop(e,tp,eg,ep,ev,re,r,rp)
-	local LOC =LOCATION_SZONE|LOCATION_GRAVE|LOCATION_REMOVED 
+	local LOC =LOCATION_ONFIELD|LOCATION_GRAVE|LOCATION_REMOVED 
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local g=Duel.SelectMatchingCard(tp,c26075014.tdfilter,tp,LOC,LOC,1,1,nil)
 	if #g>0 then
