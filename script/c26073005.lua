@@ -66,7 +66,8 @@ function c26073005.flop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.ConfirmDecktop(1-tp,#g)
 	local p=tp
 	if not Duel.IsPlayerAffectedByEffect(tp,26073014) then p=1-tp end
-	if tc and tc:IsRelateToEffect(e) and Duel.SelectYesNo(p,aux.Stringid(26073005,1)) then
+	if tc and tc:IsRelateToEffect(e)
+	and (#g==0 or Duel.SelectYesNo(p,aux.Stringid(26073005,1))) then
 		Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)
 		return
 	end

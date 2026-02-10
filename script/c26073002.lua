@@ -68,12 +68,13 @@ end
 function c26073002.flop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	local p=tp
+	local g=Duel.GetFieldGroup(tp,0,LOCATION_HAND)
 	if not Duel.IsPlayerAffectedByEffect(tp,26073014) then p=1-tp end
-	if tc and tc:IsRelateToEffect(e) and Duel.SelectYesNo(p,aux.Stringid(26073002,1)) then
+	if tc and tc:IsRelateToEffect(e)
+	and (#g==0 or Duel.SelectYesNo(p,aux.Stringid(26073002,1))) then
 		Duel.Release(tc,REASON_EFFECT)
 		return
 	end
-	local g=Duel.GetFieldGroup(tp,0,LOCATION_HAND)
 	if #g>0 then
 		Duel.ConfirmCards(tp,g)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DISCARD)

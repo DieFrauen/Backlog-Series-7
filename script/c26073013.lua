@@ -24,12 +24,30 @@ function c26073013.initial_effect(c)
 	e2:SetTarget(c26073013.sptg)
 	e2:SetOperation(c26073013.spop)
 	c:RegisterEffect(e2)
+	if not c26073013.global_check then
+		c26073013.global_check=true
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge1:SetCode(EVENT_SPSUMMON_SUCCESS)
+		ge1:SetOperation(c26073013.checkop)
+		Duel.RegisterEffect(ge1,0)
+	end
 	--act in hand
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_SINGLE)
 	e3:SetCode(EFFECT_TRAP_ACT_IN_HAND)
 	e3:SetCondition(c26073013.handcon)
 	c:RegisterEffect(e3)
+end
+function c26073013.checkcon(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.IsMainPhase() or Duel.IsBattlePhase()
+end
+function c26073013.checkop(e,tp,eg,ep,ev,re,r,rp)
+	local tc=eg:GetFirst()
+	local PHASE =Duel.GetCurrentPhase()
+	for tc in aux.Next(eg) do
+		tc:RegisterFlagEffect(26073013,RESET_EVENT|RESETS_STANDARD|RESET_PHASE+PHASE,0,1)
+	end
 end
 function c26073013.handcon(e)
 	local tp=e:GetHandlerPlayer()
@@ -75,10 +93,10 @@ end
 function c26073013.tgfilter(c,e,tp)
 	local LOC =LOCATION_HAND|LOCATION_DECK|LOCATION_EXTRA|LOCATION_GRAVE 
 	return c:IsFaceup() and c:HasFlagEffect(26073013)
-	and Duel.IsExistingTarget(c26073013.filter,tp,LOC|c:GetSummonLocation(),0,1,nil,e,tp)
+	and Duel.IsExistingTarget(c26073013.spfilter,tp,LOC|c:GetSummonLocation(),0,1,nil,e,tp)
 end
 function c26073013.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and c26073013.filter(chkc,e,tp) end
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and c26073013.tgfilter(chkc,e,tp) end
 	if chk==0 then return Duel.IsExistingTarget(c26073013.tgfilter,tp,0,LOCATION_MZONE,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
 	local tc=Duel.SelectTarget(tp,c26073013.tgfilter,tp,0,LOCATION_MZONE,1,1,nil,e,tp)
